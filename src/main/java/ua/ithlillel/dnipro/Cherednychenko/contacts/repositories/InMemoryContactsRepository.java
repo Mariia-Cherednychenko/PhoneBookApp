@@ -1,13 +1,9 @@
 package ua.ithlillel.dnipro.Cherednychenko.contacts.repositories;
 
 import ua.ithlillel.dnipro.Cherednychenko.contacts.Contact;
-import ua.ithlillel.dnipro.Cherednychenko.contacts.ContactsRepository;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 
 public class InMemoryContactsRepository implements ContactsRepository {

@@ -1,7 +1,7 @@
 package ua.ithlillel.dnipro.Cherednychenko.menu.actions;
 
 import lombok.AllArgsConstructor;
-import ua.ithlillel.dnipro.Cherednychenko.contacts.ContactsRepository;
+import ua.ithlillel.dnipro.Cherednychenko.contacts.repositories.ContactsRepository;
 import ua.ithlillel.dnipro.Cherednychenko.menu.MenuAction;
 
 import java.io.IOException;

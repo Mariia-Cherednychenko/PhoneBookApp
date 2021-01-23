@@ -1,90 +1,120 @@
 package ua.ithlillel.dnipro.Cherednychenko.contacts.repositories;
 
-import lombok.AllArgsConstructor;
 import ua.ithlillel.dnipro.Cherednychenko.contacts.Contact;
-import ua.ithlillel.dnipro.Cherednychenko.contacts.ContactsRepository;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-@AllArgsConstructor
+
 public class FileContactsRepository implements ContactsRepository {
 
     private List<Contact> contactsList = new LinkedList<>();
     File file;
 
-   /* public FileContactsRepository(List<Contact> contactsList, File file) {
-        this.contactsList = contactsList;
+   public FileContactsRepository(File file) {
         this.file = file;
-    }*/
+    }
 
     @Override
-    public List<Contact> getAll() throws IOException {
+    public List<Contact> getAll() {
         List<Contact> contactListFromFile = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String line = null;
+        try(BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String line = null;
+            while (true) {
+                line = reader.readLine();
+                if (line == null) {
+                    break;
+                } else {
+                    Pattern contactPattern=Pattern.compile("^(\\w+)\\[\\w+:\\s(\\+(?:\\d+\\s*)+)](?:\\w+)\\[\\w+:\\s((?:(?:\\w+)@(?:\\w+).(?:[A-Za-z]+)))]$");
+                    Matcher contactMatcher = contactPattern.matcher(line+reader.readLine());
+                    if(contactMatcher.matches()){
+                        contactListFromFile.add(new Contact(contactMatcher.group(1),contactMatcher.group(2),contactMatcher.group(3) ));
 
-        while (true) {
-            line = reader.readLine();
-            if (line == null) {
-                break;
-            } else {
-                String[] contactLine = line.split(" ");
-                contactListFromFile.add(new Contact(contactLine[0], contactLine[1]));
+                    }
+                }
             }
         }
-        reader.close();
+        catch (IOException e){
+            e.printStackTrace();
+        }
         return contactListFromFile;
     }
 
     @Override
-    public void remove(int index) throws IOException {
-        File tmp = File.createTempFile("tmp", "");
-
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(tmp, true));
-        String line = null;
-
-        for (int i = 0; i < index; i++) {
-            line = reader.readLine();
-            if (line == null) {
-                break;
-            }
-            writer.write(line);
+    public void remove(int index) {
+        List<Contact> contactListFromFile = getAll();
+        contactListFromFile.remove(index);
+        file.delete();
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        line = reader.readLine();
 
-        while (true) {
-            line = reader.readLine();
-            if (line == null) {
-                break;
-            }
-            writer.write(line);
-
+        for (Contact contact : contactListFromFile) {
+            add(contact);
         }
-        reader.close();
-        writer.close();
+    }
+
+        /*File tmp=null;
+        try {
+           tmp = File.createTempFile("tmp", "");
+
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tmp, true));
+            String line = null;
+
+            for (int i = 0; i < index; i++) {
+                line = reader.readLine();
+                if (line == null) {
+                    break;
+                }
+                writer.write(line);
+            }
+            line = reader.readLine();
+
+            while (true) {
+                line = reader.readLine();
+                if (line == null) {
+                    break;
+                }
+                writer.write(line);
+
+            }
+            reader.close();
+            writer.close();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
 
         file.renameTo(new File("OldPhoneBook.txt"));
         tmp.renameTo(new File("PhoneBook.txt"));
-    }
+    }*/
 
     @Override
-    public boolean add(Contact contact) throws IOException {
+    public boolean add(Contact contact) {
 
-        if (!checkPhoneValidation(contact.getPhone())){
+        if (!checkPhoneValidation(contact.getPhone())) {
             return false;
-        }
-        else {
-            BufferedWriter writer = new BufferedWriter(new FileWriter(file, true));
-            writer.write(contact.toString() + "\n");
-            writer.close();
-            return true;
-        }
+        } else {
 
+            try (PrintWriter writer = new PrintWriter(new FileOutputStream(file, true))) {
+                writer.write(contact.toString());
+                writer.close();
+                return true;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
+
+
 
     /*@Override
     public String checkPartPhoneNumber(String partPhoneNumber) throws IOException {
@@ -119,5 +149,6 @@ public class FileContactsRepository implements ContactsRepository {
         }
         return contactsListBeginningName;
     }
-*/}
+*/
+}
 
