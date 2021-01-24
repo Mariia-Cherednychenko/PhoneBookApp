@@ -2,26 +2,33 @@ package ua.ithlillel.dnipro.Cherednychenko.contacts;
 
 import lombok.Getter;
 
+import java.util.EnumMap;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-@Getter
+
 public class Contact {
+
+    @Getter
     private String name;
-    private  String phone;
-    private  String email;
 
 
-    private  enum type{
+    public  enum Type {
         PHONE,
         EMAIL
     }
 
-   public Contact(String name, String contactType) {
+    EnumMap<Type, String> contactType=new EnumMap<Type, String>(Type.class);
+
+   public String getContact(Type TYPE){
+       return contactType.get(TYPE);
+   }
+
+    public Contact(String name, String contactType) {
         this.name = name;
 
-        if (contactTypeCheck(contactType).equals(type.EMAIL)){
-            this.email=contactType;
+        if (contactTypeCheck(contactType).equals(Type.EMAIL)){
+            this.contactType.put(Type.EMAIL,contactType);
         }
         else{
             setPhone(contactType);
@@ -31,24 +38,24 @@ public class Contact {
     public Contact(String name, String contactType1, String contactType2) {
         this.name = name;
 
-        if (contactTypeCheck(contactType1).equals(type.EMAIL)){
-            this.email=contactType1;
+        if (contactTypeCheck(contactType1).equals(Type.EMAIL)){
+            contactType.put(Type.EMAIL,contactType1);
             setPhone(contactType2);
         }
         else {
-            this.email=contactType2;
+            contactType.put(Type.EMAIL,contactType2);
             setPhone(contactType1);
         }
     }
 
-    private type contactTypeCheck(String contactType){
+    private Type contactTypeCheck(String contactType){
         Pattern patternEmail = Pattern.compile("(\\w+)@(\\w+).([A-Za-z]+)");
 
         if(patternEmail.matcher(contactType).matches()){
-            return type.EMAIL;
+            return Type.EMAIL;
         }
        else{
-           return type.PHONE;
+           return Type.PHONE;
         }
 
     }
@@ -58,8 +65,9 @@ public class Contact {
         Pattern pattern1=Pattern.compile("380\\d{9}");
         Pattern pattern2=Pattern.compile("80\\d{9}");
         Pattern pattern3=Pattern.compile("0\\d{9}");
+        String phone="";
         if (pattern1.matcher(phoneShow).matches()){
-            phone = "+"+ phoneShow.substring(0,2)+ " "+ phoneShow.substring(2,5)+" "+
+           phone = "+"+ phoneShow.substring(0,2)+ " "+ phoneShow.substring(2,5)+" "+
                     phoneShow.substring(5,8)+" "+ phoneShow.substring(8);
         }
         else if (pattern2.matcher(phoneShow).matches()){
@@ -70,7 +78,9 @@ public class Contact {
             phone = "+38 " + phoneShow.substring(0,3)+" "+
                     phoneShow.substring(3,6)+" "+ phoneShow.substring(6);
         }
+        contactType.put(Type.PHONE,phone);
     }
+
 
     @Override
     public boolean equals(Object o) {
@@ -78,13 +88,12 @@ public class Contact {
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
         return Objects.equals(name, contact.name) &&
-                Objects.equals(email, contact.email) &&
-                Objects.equals(phone, contact.phone);
+                Objects.equals(contactType, contact.contactType);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, email, phone);
+        return Objects.hash(name, contactType);
     }
 
     @Override
@@ -93,15 +102,15 @@ public class Contact {
         String phoneInfo="";
         String emailInfo="";
 
-        if(phone!=null) {
+        if(contactType.get(Type.PHONE)!=null) {
             phoneInfo = String.format("%s[phone: %s]\n",
                     name,
-                    phone);
+                    contactType.get(Type.PHONE));
         }
-        if(email!=null) {
+        if(contactType.get(Type.EMAIL)!=null) {
             emailInfo = String.format("%s[email: %s]\n",
                     name,
-                    email);
+                    contactType.get(Type.EMAIL));
         }
 
         return  String.format("%s%s",

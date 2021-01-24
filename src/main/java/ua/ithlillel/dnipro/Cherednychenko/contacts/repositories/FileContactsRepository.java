@@ -60,46 +60,12 @@ public class FileContactsRepository implements ContactsRepository {
         }
     }
 
-        /*File tmp=null;
-        try {
-           tmp = File.createTempFile("tmp", "");
 
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            BufferedWriter writer = new BufferedWriter(new FileWriter(tmp, true));
-            String line = null;
-
-            for (int i = 0; i < index; i++) {
-                line = reader.readLine();
-                if (line == null) {
-                    break;
-                }
-                writer.write(line);
-            }
-            line = reader.readLine();
-
-            while (true) {
-                line = reader.readLine();
-                if (line == null) {
-                    break;
-                }
-                writer.write(line);
-
-            }
-            reader.close();
-            writer.close();
-        }
-        catch (IOException e){
-            e.printStackTrace();
-        }
-
-        file.renameTo(new File("OldPhoneBook.txt"));
-        tmp.renameTo(new File("PhoneBook.txt"));
-    }*/
 
     @Override
     public boolean add(Contact contact) {
 
-        if (!checkPhoneValidation(contact.getPhone())) {
+        if (!checkPhoneValidation(contact.getContact(Contact.Type.PHONE))) {
             return false;
         } else {
 
@@ -116,39 +82,6 @@ public class FileContactsRepository implements ContactsRepository {
 
 
 
-    /*@Override
-    public String checkPartPhoneNumber(String partPhoneNumber) throws IOException {
-        List<Contact> contactsList = getAll();
-        List<Contact> contactsListPartPhone = new ArrayList<>();
-        for (int i = 0; i < contactsList.size(); i++) {
-            if (contactsList.get(i).getPhone().replaceAll("\\s", "").contains(partPhoneNumber)) {
-                contactsListPartPhone.add(contactsList.get(i));
-            }
-        }
-        return contactsListPartPhone;
 
-    }
-
-    @Override
-    public String checkBeginningName(String beginningName) throws IOException {
-
-        String contactsFound = contactsList
-                .stream()
-                .map(contact -> contact.getName().toLowerCase())
-                .filter(contact->contact.startsWith(beginningName))
-                .collect(Collectors.joining(" \n"));
-        return contactsFound;
-
-
-         List<Contact> contactsList = getAll();
-        List<Contact> contactsListBeginningName = new ArrayList<>();
-        for (int i = 0; i < contactsList.size(); i++) {
-            if (contactsList.get(i).getName().toLowerCase().startsWith(beginningName.toLowerCase())){
-                contactsListBeginningName.add(contactsList.get(i));
-            }
-        }
-        return contactsListBeginningName;
-    }
-*/
 }
 

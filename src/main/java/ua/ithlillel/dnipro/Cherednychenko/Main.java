@@ -7,13 +7,12 @@ import ua.ithlillel.dnipro.Cherednychenko.menu.Menu;
 import ua.ithlillel.dnipro.Cherednychenko.menu.actions.*;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
 
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         File file=new File ("PhoneBook.txt");
@@ -35,7 +34,7 @@ public class Main {
         menu.addAction(new ShowContactsMenuAction(contactsRepository));
         menu.addAction(new AddContactMenuAction(contactsRepository,scanner));
         menu.addAction(new RemoveContactMenuAction(contactsRepository,scanner));
-        menu.addAction(new CheckPartPhoneNumberMenuAction(contactsRepository,scanner));
+        menu.addAction(new CheckPartOfContactMenuAction(contactsRepository,scanner));
         menu.addAction(new CheckBeginningNameMenuAction(contactsRepository,scanner));
         menu.addAction(new ReadFileMenuAction(file));
         menu.addAction(new ExitMenuAction());

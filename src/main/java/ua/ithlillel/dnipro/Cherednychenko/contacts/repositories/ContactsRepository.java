@@ -2,7 +2,6 @@ package ua.ithlillel.dnipro.Cherednychenko.contacts.repositories;
 
 import ua.ithlillel.dnipro.Cherednychenko.contacts.Contact;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,23 +9,23 @@ import java.util.stream.Collectors;
 
 public interface ContactsRepository {
 
-    List<Contact> getAll() throws IOException;
-    void remove (int index) throws IOException;
-    boolean add (Contact contact) throws IOException;
+    List<Contact> getAll() ;
+    void remove (int index) ;
+    boolean add (Contact contact) ;
 
-    default  List<Contact> checkPartPhoneNumber(String partPhoneNumber) throws IOException{
+    default  List<Contact> checkPartPhoneNumber(String partOfContact, Contact.Type contactType){
         List<Contact> contactsFound = getAll()
                 .stream()
-                .filter(contact->contact.getPhone().replaceAll("\\s","").contains(partPhoneNumber))
+                .filter(contact->contact.getContact(contactType).replaceAll("\\s","").contains(partOfContact))
                 .collect(Collectors.toList());
         return contactsFound;
     }
 
-    default   List<Contact> checkBeginningName(String beginningName) throws IOException{
+    default   List<Contact> checkBeginningName(String beginningName){
         List<Contact> contactsFound = getAll()
-                .stream()
-                .filter(contact->contact.getName().toLowerCase().startsWith(beginningName))
-                .collect(Collectors.toList());
+                    .stream()
+                    .filter(contact->contact.getName().toLowerCase().startsWith(beginningName))
+                    .collect(Collectors.toList());
         return contactsFound;
     }
 

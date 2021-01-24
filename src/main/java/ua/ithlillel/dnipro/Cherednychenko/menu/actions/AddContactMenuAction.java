@@ -5,7 +5,6 @@ import ua.ithlillel.dnipro.Cherednychenko.contacts.Contact;
 import ua.ithlillel.dnipro.Cherednychenko.contacts.repositories.ContactsRepository;
 import ua.ithlillel.dnipro.Cherednychenko.menu.MenuAction;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 @AllArgsConstructor
@@ -14,10 +13,6 @@ public class AddContactMenuAction implements MenuAction {
     private ContactsRepository contactsRepository;
     private Scanner scanner;
 
-    /*public AddContactMenuAction(ContactsRepository contactsRepository, Scanner scanner) {
-        this.contactsRepository = contactsRepository;
-        this.scanner = scanner;
-    }*/
 
     @Override
     public String getName() {
@@ -36,13 +31,9 @@ public class AddContactMenuAction implements MenuAction {
             System.out.println("Enter contact e-mail: ");
             String email = scanner.nextLine();
 
-            try {
-                if (!contactsRepository.add(new Contact(name, phone,email))){
-                   System.out.println("Incorrect Input");
-                   continue;
-               }
-            } catch (IOException e) {
-                e.printStackTrace();
+            if (!contactsRepository.add(new Contact(name, phone, email))) {
+                System.out.println("Incorrect Input");
+                continue;
             }
             break;
         }

@@ -20,7 +20,7 @@ public class Menu {
         actions[actions.length-1]=action;
     }
 
-    public void run() throws IOException {
+    public void run(){
         while (true){
             showMenu();
             int choice;
@@ -36,7 +36,13 @@ public class Menu {
                 System.out.println("Invalid input");
                 continue;
             }
-            actions[choice].execute();
+            try {
+                actions[choice].execute();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
             if (actions[choice].closeAfter()) break;
         }
     }
