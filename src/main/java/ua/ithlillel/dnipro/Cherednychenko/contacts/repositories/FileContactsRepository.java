@@ -69,7 +69,7 @@ public class FileContactsRepository implements ContactsRepository {
             return false;
         } else {
 
-            try (PrintWriter writer = new PrintWriter(new FileOutputStream(file, true))) {
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, true))) {
                 writer.write(contact.toString());
                 writer.close();
                 return true;
