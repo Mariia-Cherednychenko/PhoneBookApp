@@ -2,7 +2,7 @@ package ua.ithlillel.dnipro.Cherednychenko;
 
 import ua.ithlillel.dnipro.Cherednychenko.contacts.Contact;
 import ua.ithlillel.dnipro.Cherednychenko.contacts.repositories.ContactsRepository;
-import ua.ithlillel.dnipro.Cherednychenko.contacts.repositories.FileContactsRepository;
+import ua.ithlillel.dnipro.Cherednychenko.contacts.repositories.ContactsNioServiceRepository;
 import ua.ithlillel.dnipro.Cherednychenko.menu.Menu;
 import ua.ithlillel.dnipro.Cherednychenko.menu.actions.*;
 
@@ -17,7 +17,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         File file=new File ("PhoneBook.txt");
 
-        ContactsRepository contactsRepository = new FileContactsRepository(file);
+        ContactsRepository contactsRepository = new ContactsNioServiceRepository(file);
         contactsRepository.add(new Contact("Vasya", "76583632624076", "vasia@example.com"));
         contactsRepository.add(new Contact("Petya", "+8 093 453 46 1278087", "petia@example.com"));
         contactsRepository.add(new Contact("Sanya", "(093)4534613","sania@example.com"));
