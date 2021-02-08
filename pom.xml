@@ -9,6 +9,7 @@
     <version>0.0.1</version>
 
     <properties>
+        <jackson.version>2.12.1</jackson.version>
         <java.version>11</java.version>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
@@ -21,6 +22,26 @@
             <version>1.18.16</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -61,7 +82,7 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
                             <addClasspath>true</addClasspath>
-                            <mainClass>ua.ithlillel.dnipro.Cherednychenko.Main</mainClass>
+                            <mainClass>contact_book.Cherednychenko.menu.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
