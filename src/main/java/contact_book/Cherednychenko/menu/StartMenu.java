@@ -1,6 +1,6 @@
 package contact_book.Cherednychenko.menu;
 
-import contact_book.Cherednychenko.config.ConfigurationWorkMode;
+import contact_book.Cherednychenko.config_properties.ConfigurationWorkMode;
 import contact_book.Cherednychenko.exception.IncorrectInputContactException;
 import lombok.AllArgsConstructor;
 

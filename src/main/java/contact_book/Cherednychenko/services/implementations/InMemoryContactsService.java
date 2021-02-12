@@ -1,5 +1,6 @@
 package contact_book.Cherednychenko.services.implementations;
 
+import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.entities.Contact;
 import contact_book.Cherednychenko.services.ContactsService;
 
@@ -8,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+@CreateIfMode("memory")
 public class InMemoryContactsService implements ContactsService {
 
     List<Contact> contacts = new ArrayList<>();

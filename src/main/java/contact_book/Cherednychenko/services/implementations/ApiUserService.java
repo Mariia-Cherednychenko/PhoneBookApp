@@ -2,6 +2,7 @@ package contact_book.Cherednychenko.services.implementations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.dto.contacts.GetUserListResponse;
 import contact_book.Cherednychenko.dto.contacts.LoginRequest;
 import contact_book.Cherednychenko.dto.users.LoginResponse;
@@ -10,6 +11,7 @@ import contact_book.Cherednychenko.exception.FailedGetContactException;
 import contact_book.Cherednychenko.exception.FailedLoginContactException;
 import contact_book.Cherednychenko.services.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 import java.io.IOException;
 import java.net.URI;
@@ -22,7 +24,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CreateIfMode("api")
 @RequiredArgsConstructor
+@ToString
 public class ApiUserService implements UserService {
 
     private String token;

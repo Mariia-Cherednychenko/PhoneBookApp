@@ -2,6 +2,7 @@ package contact_book.Cherednychenko.services.implementations;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.dto.contacts.AddContactRequest;
 import contact_book.Cherednychenko.dto.contacts.FindContactPerNameRequest;
 import contact_book.Cherednychenko.dto.users.StatusResponse;
@@ -23,13 +24,14 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
-
+@CreateIfMode("api")
 @RequiredArgsConstructor
 public class ApiContactService implements ContactsService {
     private final UserService userService;
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
     private final String pathUri;
+
 
     @Override
     public List<Contact> getAll() {

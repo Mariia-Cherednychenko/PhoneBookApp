@@ -1,6 +1,6 @@
 package contact_book.Cherednychenko.menu.actions;
 
-import contact_book.Cherednychenko.config.ConfigurationWorkMode;
+import contact_book.Cherednychenko.config_properties.ConfigurationWorkMode;
 import contact_book.Cherednychenko.menu.MenuAction;
 import contact_book.Cherednychenko.services.ContactsService;
 import contact_book.Cherednychenko.services.UserService;

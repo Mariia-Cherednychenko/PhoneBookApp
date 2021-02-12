@@ -1,5 +1,6 @@
 package contact_book.Cherednychenko.services.implementations;
 
+import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.dto.contacts.GetUserListResponse;
 import contact_book.Cherednychenko.entities.User;
 import contact_book.Cherednychenko.services.UserService;
@@ -7,6 +8,7 @@ import contact_book.Cherednychenko.services.UserService;
 import java.util.Collections;
 import java.util.List;
 
+@CreateIfMode({"memory", "file"})
 public class FictiveFileUserService implements UserService {
     @Override
     public String getToken() {

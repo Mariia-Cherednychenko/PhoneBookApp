@@ -1,6 +1,6 @@
 package contact_book.Cherednychenko.menu.actions;
 
-import contact_book.Cherednychenko.config.ConfigurationWorkMode;
+import contact_book.Cherednychenko.config_properties.ConfigurationWorkMode;
 import contact_book.Cherednychenko.services.UserService;
 import lombok.AllArgsConstructor;
 import contact_book.Cherednychenko.entities.Contact;

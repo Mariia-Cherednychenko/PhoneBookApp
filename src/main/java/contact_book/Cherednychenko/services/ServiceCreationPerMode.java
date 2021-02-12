@@ -2,7 +2,7 @@
 package contact_book.Cherednychenko.services;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import contact_book.Cherednychenko.config.ConfigurationWorkMode;
+import contact_book.Cherednychenko.config_properties.ConfigurationWorkMode;
 import contact_book.Cherednychenko.services.implementations.ApiContactService;
 import contact_book.Cherednychenko.services.implementations.ApiUserService;
 import contact_book.Cherednychenko.services.implementations.FileContactsService;

@@ -1,5 +1,6 @@
 package contact_book.Cherednychenko.services.implementations;
 
+import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.entities.Contact;
 import contact_book.Cherednychenko.exception.FailedAddContactException;
 import contact_book.Cherednychenko.exception.FailedGetContactException;
@@ -15,6 +16,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.function.Predicate;
 
+@CreateIfMode("file")
 @RequiredArgsConstructor
 public class FileContactsService implements ContactsService {
 

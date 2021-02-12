@@ -1,5 +1,6 @@
 package contact_book.Cherednychenko.services.implementations;
 
+import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.entities.Contact;
 import contact_book.Cherednychenko.exception.FailedAddContactException;
 import contact_book.Cherednychenko.exception.FailedGetContactException;
@@ -23,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
+@CreateIfMode("memory")
 @RequiredArgsConstructor
 public class NioContactsService implements ContactsService {
 

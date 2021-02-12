@@ -1,20 +1,27 @@
-package contact_book.Cherednychenko.config;
+package contact_book.Cherednychenko.config_properties;
 
+import contact_book.Cherednychenko.annotations.SystemProp;
 import contact_book.Cherednychenko.exception.IncorrectProfileException;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
-public class AppProperties {
-   // @SystemProp("app.prop")
+@NoArgsConstructor
+public class AppPropertiesProfile {
+
 
     private String profileValue;
+
+    @SystemProp("app.profile")
     private  ProfileType profile;
+
     public enum ProfileType{
         DEV,
         PROD
     }
 
-    public AppProperties(ProfileType profileType) {
+
+    public AppPropertiesProfile(ProfileType profileType) {
         profile=profileType;
         setProfileValue();
     }
