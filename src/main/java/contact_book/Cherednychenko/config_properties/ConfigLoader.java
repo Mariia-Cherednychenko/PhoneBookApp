@@ -1,12 +1,14 @@
 package contact_book.Cherednychenko.config_properties;
 
 import contact_book.Cherednychenko.exception.FailedLoadigConfigurationException;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.io.FileInputStream;
 import java.util.Properties;
 
-/*@AllArgsConstructor
-@NoArgsConstructor*/
+@AllArgsConstructor
+@NoArgsConstructor
 public class ConfigLoader {
 
     AppPropertiesProfile appPropertiesProfile;
@@ -15,7 +17,6 @@ public class ConfigLoader {
 
     public boolean configurationLoad(Properties property) {
         try {
-
             //setConfigWorkMode();
             property.load(new FileInputStream(appPropertiesProfile.getProfileValue()));
 
@@ -27,9 +28,7 @@ public class ConfigLoader {
         return false;
     }
 
-    private void setConfigWorkMode() {
-        System.setProperty("app.service.workmode", configurationWorkMode.getWorkMode().toString());
-    }
+
 }
 
 

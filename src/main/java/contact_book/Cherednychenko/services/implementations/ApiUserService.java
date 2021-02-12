@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.dto.contacts.GetUserListResponse;
 import contact_book.Cherednychenko.dto.contacts.LoginRequest;
+import contact_book.Cherednychenko.dto.contacts.RegisterRequest;
 import contact_book.Cherednychenko.dto.users.LoginResponse;
+import contact_book.Cherednychenko.dto.users.RegisterResponse;
 import contact_book.Cherednychenko.entities.User;
 import contact_book.Cherednychenko.exception.FailedGetContactException;
 import contact_book.Cherednychenko.exception.FailedLoginContactException;
@@ -47,7 +49,23 @@ public class ApiUserService implements UserService {
 
     @Override
     public void register(User user) {
+        RegisterRequest registerRequest = new RegisterRequest();
 
+        try {
+            HttpRequest httpRequest= createPostRequest("/register",user);
+            HttpResponse<String> response = HTTPCLIENT.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+            RegisterResponse registerResponse = OBJECTMAPPER.readValue(response.body(),RegisterResponse.class);
+
+            if("ok".equals(registerResponse.getStatus())){
+                //token=registerResponse.getToken();
+                localDateTime=LocalDateTime.now();
+            }
+            else{
+                new FailedLoginContactException().getMessage(registerResponse.getError());
+            }
+
+        }
+        catch (Exception e) {new FailedLoginContactException().getMessage();}
     }
 
     @Override
@@ -110,6 +128,7 @@ public class ApiUserService implements UserService {
         return HttpRequest.newBuilder()
                 .uri(URI.create(PATHURI +path))
                 .POST(HttpRequest.BodyPublishers.ofString(OBJECTMAPPER.writeValueAsString(request)))
+                .header("Accept", "application/json")
                 .header("Content-type", "application/json")
                 .build();
     }

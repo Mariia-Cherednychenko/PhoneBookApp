@@ -22,7 +22,7 @@ public class StartMenu {
                 "\n1 - работа через приложение / work via app" +
                 "\n2 - работа через файл / work via file" +
                 "\n3 - работа через внутреннюю память / work via inner memory" +
-                "\n0 - выйти из программы  / leave the program" +
+                "\n4 - выйти из программы  / leave the program" +
                 "\nВведите вариант работы / Enter the work mode: ");
 
         int input = scanner.nextInt();

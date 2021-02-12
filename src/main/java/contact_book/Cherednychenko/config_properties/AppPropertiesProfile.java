@@ -14,7 +14,6 @@ public class AppPropertiesProfile {
 
     @SystemProp("app.profile")
     private  ProfileType profile;
-
     public enum ProfileType{
         DEV,
         PROD

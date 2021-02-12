@@ -21,56 +21,26 @@ import java.util.Scanner;
 
 public class Main {
 
-    /*interface  Example {
-        void example();
-    }
-
-    static class Ex implements Example{
-
-        @Override
-        public void example() {
-            System.out.println("Hello World");
-        }
-    }
-
-    @AllArgsConstructor
-    static
-    class ExampleProxy implements  Example{
-        Example example;
-
-        @Override
-        public void example() {
-            long start = System.currentTimeMillis();
-            example.example();
-            long end = System.currentTimeMillis();
-            System.out.println(end-start);
-
-        }
-    }*/
-
-
     public static void main(String[] args) {
 
-        ConfigLoadingReflection configLoaderRef = new ConfigLoadingReflection(); // loading properties from the file
-        AppPropertiesProfile appPropertiesProfile = configLoaderRef.getSystemProps(AppPropertiesProfile.class);
-
-
+        ConfigLoadingReflection configLoadingRef = new ConfigLoadingReflection(); // loading properties from the file
+        AppPropertiesProfile appPropertiesProfile = configLoadingRef.getSystemProps(AppPropertiesProfile.class);
+        appPropertiesProfile.setProfileValue();
         System.out.println(appPropertiesProfile.toString());
-
-        String configFileName = "app-" + appPropertiesProfile.getProfile().toString().toLowerCase() + ".properties";
-        System.out.println("Load file " + configFileName);
+        System.out.println("Load file " + appPropertiesProfile.getProfileValue());
 
 
-        var configurationWorkMode = new ConfigurationWorkMode();
+       ConfigurationWorkMode configurationWorkMode = new ConfigurationWorkMode();
 
-        ConfigLoader configLoader = new ConfigLoader();
+
         Properties configProp = new Properties();
         Scanner scanner = new Scanner(System.in);
 
         StartMenu startMenu = new StartMenu(configurationWorkMode, scanner);
         boolean menuLaunch = startMenu.checkMenuLaunch();
-        boolean congirLoaded = configLoader.configurationLoad(configProp);
-        if ( menuLaunch == true && congirLoaded== true) {
+        ConfigLoader configLoader = new ConfigLoader(appPropertiesProfile,configurationWorkMode);
+        boolean configLoaded = configLoader.configurationLoad(configProp);
+        if ( menuLaunch == true && configLoaded== true) {
 
             ObjectMapper objectMapper = new ObjectMapper();
             ContactsSerializer contactsSerializer = new PerfoundContactSerializer();
@@ -95,6 +65,11 @@ public class Main {
             MainMenu mainMenu = new MainMenu(configurationWorkMode, userService, scanner);
 
             mainMenu.addActionsOptionsToMainMenu(configurationWorkMode, userService, contactsService, scanner);
+
+            mainMenu.run();
+        }
+        else if (menuLaunch== false && configLoaded == true){
+            System.out.println("Программа закрывается / Program is closing");
         }
 
 
