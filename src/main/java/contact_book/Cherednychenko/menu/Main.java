@@ -4,13 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import contact_book.Cherednychenko.config_properties.AppPropertiesProfile;
 import contact_book.Cherednychenko.config_properties.ConfigLoader;
 import contact_book.Cherednychenko.config_properties.ConfigurationWorkMode;
-import contact_book.Cherednychenko.exception.FailedLoadigConfigurationException;
 import contact_book.Cherednychenko.services.ContactsService;
+import contact_book.Cherednychenko.services.ServiceCreationPerMode;
 import contact_book.Cherednychenko.services.UserService;
-import contact_book.Cherednychenko.services.implementations.ApiContactService;
-import contact_book.Cherednychenko.services.implementations.ApiUserService;
-import contact_book.Cherednychenko.services.implementations.FileContactsService;
-import contact_book.Cherednychenko.services.implementations.InMemoryContactsService;
 import contact_book.Cherednychenko.utility.ContactsSerializer;
 import contact_book.Cherednychenko.utility.PerfoundContactSerializer;
 import reflection.ConfigLoadingReflection;
@@ -47,20 +43,18 @@ public class Main {
             HttpClient httpClient = HttpClient.newBuilder().build();
             String baseUri = configProp.getProperty("api.base-url");
             String baseFile = configProp.getProperty("file.path");
-            UserService userService = null;
-            ContactsService contactsService = null;
 
-            if (configurationWorkMode.getWorkMode().equals(ConfigurationWorkMode.WorkModeType.API)) {
-                userService = new ApiUserService(baseUri, objectMapper, httpClient);
-                contactsService = new ApiContactService(userService, httpClient, objectMapper, baseUri);
-            } else if (configurationWorkMode.getWorkMode().equals(ConfigurationWorkMode.WorkModeType.FILE)) {
-                contactsService = new FileContactsService(contactsSerializer, baseFile);
-            } else if (configurationWorkMode.getWorkMode().equals(ConfigurationWorkMode.WorkModeType.MEMORY)) {
-                contactsService = new InMemoryContactsService();
-            } else {
-                new FailedLoadigConfigurationException().getMessage(("Ошибка при загрузке конфигурации из файла " +
-                        "/ Error loading configuration"));
-            }
+
+            ServiceCreationPerMode serviceCreationPerMode = new ServiceCreationPerMode(
+                    objectMapper,
+                    contactsSerializer,
+                    httpClient,
+                    baseUri,
+                    baseFile);
+            serviceCreationPerMode.invoke();
+
+            UserService userService=serviceCreationPerMode.getUserService();
+            ContactsService contactsService=serviceCreationPerMode.getContactsService();
 
             MainMenu mainMenu = new MainMenu(configurationWorkMode, userService, scanner);
 
