@@ -4,11 +4,10 @@ package contact_book.Cherednychenko.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import contact_book.Cherednychenko.config_properties.ConfigurationWorkMode;
 import contact_book.Cherednychenko.exception.FailedLoadigConfigurationException;
+import contact_book.Cherednychenko.exception.FailedToCreateServiceException;
 import contact_book.Cherednychenko.utility.ContactsSerializer;
-import pattern.factory.BuildContactServiceFactory;
-import pattern.factory.BuildUserServiceFactory;
-import pattern.factory.ContactsServiceFactory;
-import pattern.factory.UserServiceFactory;
+import pattern.factory.BuildServiceFactory;
+import pattern.factory.ServiceFactory;
 
 import java.net.http.HttpClient;
 
@@ -20,9 +19,7 @@ public class ServiceCreationPerMode {
     private String baseFile;
     private UserService userService;
     private ContactsService contactsService;
-    private ContactsServiceFactory buildContactServiceFactory = new BuildContactServiceFactory();
-    private UserServiceFactory buildUserServiceFactory = new BuildUserServiceFactory();
-
+    private ServiceFactory buildServiceFactory = new BuildServiceFactory();
 
 
     public ServiceCreationPerMode(ObjectMapper objectMapper, ContactsSerializer contactsSerializer,
@@ -42,21 +39,25 @@ public class ServiceCreationPerMode {
         return contactsService;
     }
 
-    public ServiceCreationPerMode invoke() {
-        if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.API.toString())) {
-           userService = buildUserServiceFactory.buildApiUserService(baseUri, objectMapper, httpClient);
-           contactsService =buildContactServiceFactory.buildApiContactsService(httpClient, objectMapper, baseUri);
-        }
-        else if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.FILE.toString())) {
-            contactsService = buildContactServiceFactory.buildFileContactsService(contactsSerializer, baseFile);
-        } else if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.FILE.toString())) {
-           contactsService =buildContactServiceFactory.buildInMemoryContactsService();
-          
-        } else {
-            new FailedLoadigConfigurationException().getMessage(("Ошибка при загрузке конфигурации из файла " +
-                    "/ Error loading configuration"));
-        }
-            return this;
-        }
+    public ServiceCreationPerMode invoke() throws FailedToCreateServiceException {
+        if (contactsService == null && userService == null) {
+            if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.API.toString())) {
+                {
+                    userService = buildServiceFactory.buildApiUserService(baseUri, objectMapper, httpClient);
+                    contactsService = buildServiceFactory.buildApiContactsService(httpClient, objectMapper, baseUri);
+                }
+            } else if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.FILE.toString())) {
+                if (contactsService == null && userService == null)
+                    contactsService = buildServiceFactory.buildFileContactsService(contactsSerializer, baseFile);
+            } else if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.FILE.toString())) {
+                contactsService = buildServiceFactory.buildInMemoryContactsService();
+            } else {
+                new FailedLoadigConfigurationException().getMessage(("Ошибка при загрузке конфигурации из файла " +
+                        "/ Error loading configuration"));
+            }
+        } else new FailedToCreateServiceException().getMessage();
+        
+        return this;
     }
+}
 

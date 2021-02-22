@@ -1,9 +1,10 @@
-package contact_book.Cherednychenko.menu;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import contact_book.Cherednychenko.config_properties.AppPropertiesProfile;
 import contact_book.Cherednychenko.config_properties.ConfigLoader;
 import contact_book.Cherednychenko.config_properties.ConfigurationWorkMode;
+import contact_book.Cherednychenko.exception.FailedToCreateServiceException;
+import contact_book.Cherednychenko.menu.MainMenu;
+import contact_book.Cherednychenko.menu.StartMenu;
 import contact_book.Cherednychenko.services.ContactsService;
 import contact_book.Cherednychenko.services.ServiceCreationPerMode;
 import contact_book.Cherednychenko.services.UserService;
@@ -17,7 +18,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FailedToCreateServiceException {
 
         ConfigLoadingReflection configLoadingRef = new ConfigLoadingReflection(); // loading properties from the file
         AppPropertiesProfile appPropertiesProfile = configLoadingRef.getSystemProps(AppPropertiesProfile.class);
