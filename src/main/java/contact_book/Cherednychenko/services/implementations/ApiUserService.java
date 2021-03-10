@@ -12,6 +12,9 @@ import contact_book.Cherednychenko.entities.User;
 import contact_book.Cherednychenko.exception.FailedGetContactException;
 import contact_book.Cherednychenko.exception.FailedLoginContactException;
 import contact_book.Cherednychenko.services.UserService;
+import database.DataBaseConnection;
+import database.DataBase;
+import database.UserDataBase;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -36,15 +39,25 @@ public class ApiUserService implements UserService {
     private final String PATHURI;
     private final ObjectMapper OBJECTMAPPER;
     private final HttpClient HTTPCLIENT;
+    private UserDataBase userDataBase;
+    private int userId;
+    private DataBaseConnection connectionToDataBase;
 
 
     @Override
     public String getToken() {return token;}
 
     @Override
+    public int getUserId(){return  userId;}
+
+
+    @Override
     public boolean isAuth() {
-        if(token==null || localDateTime == null){return false;}
-        return Duration.between(LocalDateTime.now(), localDateTime).toMinutes()<55;
+        if (token == null || localDateTime == null) {
+            return false;
+        }
+            return Duration.between(LocalDateTime.now(), localDateTime).toMinutes() < 55;
+
     }
 
     @Override
@@ -59,6 +72,7 @@ public class ApiUserService implements UserService {
             if("ok".equals(registerResponse.getStatus())){
                 //token=registerResponse.getToken();
                 localDateTime=LocalDateTime.now();
+
             }
             else{
                 new FailedLoginContactException().getMessage(registerResponse.getError());
@@ -132,4 +146,18 @@ public class ApiUserService implements UserService {
                 .header("Content-type", "application/json")
                 .build();
     }
+
+    @Override
+    public void createUserServiceDatabase(){
+        if (userDataBase== null){
+            userDataBase = new UserDataBase();
+        }
+    }
+
+    @Override
+    public DataBase getDataBase() {
+        return userDataBase;
+    }
+
+
 }

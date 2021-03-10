@@ -11,8 +11,12 @@ import contact_book.Cherednychenko.exception.FailedAddContactException;
 import contact_book.Cherednychenko.exception.FailedGetContactException;
 import contact_book.Cherednychenko.exception.FailedRemoveContactException;
 import contact_book.Cherednychenko.services.ContactsService;
+import database.ContactDataBase;
+import database.DataBase;
+import database.DataBaseConnection;
 import lombok.RequiredArgsConstructor;
 import pattern.factory.HttpRequestFactory;
+import pattern.request.JsonRequestFactory;
 
 import java.io.IOException;
 import java.net.http.HttpClient;
@@ -28,16 +32,13 @@ public class ApiContactService implements ContactsService {
     private final HttpClient httpClient;
     private final ObjectMapper mapper;
     private final String pathUri;
-   private HttpRequestFactory httpRequestFactory;
+    private HttpRequestFactory httpRequestFactory;
+    private ContactDataBase contactDataBase;
 
     @Override
     public List<Contact> getAll() {
+        httpRequestFactory = new JsonRequestFactory(mapper);
         HttpRequest httpRequest = httpRequestFactory.createGetRequest(pathUri + "/contacts");
-        /*HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(pathUri + "/contacts"))
-                .GET()
-                .header("Authorization", "Bearer " + userService.getToken())
-                .build();*/
 
         try {
             HttpResponse<String> response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
@@ -72,6 +73,7 @@ public class ApiContactService implements ContactsService {
         addContactRequest.setName(contact.getName());
         addContactRequest.setType(contact.getType().toString().toLowerCase());
         addContactRequest.setValue(contact.getValue());
+        httpRequestFactory = new JsonRequestFactory(mapper);
 
         try {
             HttpRequest httpRequest = httpRequestFactory.createPostRequest("/contacts/add", addContactRequest);
@@ -80,50 +82,17 @@ public class ApiContactService implements ContactsService {
             if ("error".equals(statusResponse.getStatus())) {
                 new FailedAddContactException().getMessage(statusResponse.getError());
             }
+
         } catch (Exception e) {
             new FailedAddContactException().getMessage();
         }
 
     }
 
-   /* private HttpRequest createAuthorizedPostRequest
-            (String path, Object addContactRequest) throws JsonProcessingException {
-        return httpRequestFactory.createPostRequest(path,addContactRequest);
-        *//*HttpRequest.newBuilder()
-                .uri(URI.create(pathUri + path))
-                .POST(HttpRequest.BodyPublishers.ofString(mapper.writeValueAsString(addContactRequest)))
-                .header("Authorization", "Bearer " + userService.getToken())
-                .header("Content-type", "application/json")
-                .build();*//*
-    }
-*/
-   /* public boolean addContact(String token, String link, Contact contact) {
-
-        try {
-            String AddContactRequest = objectMapper.writeValueAsString(contact);
-            HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create(link))
-                    .POST(HttpRequest.BodyPublishers.ofString(AddContactRequest))
-                    .header("Authorization", "Bearer " + token)
-                    .header("Accept", "application/json")
-                    .header("Content-Type", "application/json")
-                    .build();
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            //System.out.println(response.statusCode());
-            //System.out.println(response.body());
-
-            return true;
-
-        } catch (Exception e) {
-            new ServerException("Ошибка при добавлении контакта").getMessage();
-        }
-        return false;
-
-    }*/
-
     @Override
     public void remove(Integer id) {
 
+        contactDataBase.removeFromDataBase(id, new DataBaseConnection());
         new FailedRemoveContactException()
                 .getMessage("Невозможно удалить контакт из онлайн сервера / " +
                         "It is impossible to remove the contact form the online server");
@@ -136,6 +105,7 @@ public class ApiContactService implements ContactsService {
 
         FindContactPerNameRequest findContactRequest = new FindContactPerNameRequest();
         findContactRequest.setNameBeginning(beginningName);
+        httpRequestFactory = new JsonRequestFactory(mapper);
 
         try {
             HttpRequest httpRequest = httpRequestFactory.createPostRequest("/contacts/find", findContactRequest);
@@ -169,6 +139,7 @@ public class ApiContactService implements ContactsService {
 
         FindContactPerNameRequest findContactRequest = new FindContactPerNameRequest();
         findContactRequest.setNameBeginning(valueContact);
+        httpRequestFactory = new JsonRequestFactory(mapper);
 
         try {
             HttpRequest httpRequest = httpRequestFactory.createPostRequest("/contacts/find", findContactRequest);
@@ -195,4 +166,17 @@ public class ApiContactService implements ContactsService {
         }
         return Collections.emptyList();
     }
+
+    @Override
+    public void createContactServiceDatabase(){
+        if (contactDataBase== null){
+            contactDataBase = new ContactDataBase();
+        }
+    }
+
+    @Override
+    public DataBase getDataBase() {
+        return contactDataBase;
+    }
+
 }

@@ -4,6 +4,7 @@ import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.dto.contacts.GetUserListResponse;
 import contact_book.Cherednychenko.entities.User;
 import contact_book.Cherednychenko.services.UserService;
+import database.DataBase;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,21 @@ public class FictiveFileUserService implements UserService {
     @Override
     public void login(User user) {
         throw new UnsupportedOperationException("Не поддерживается вход / login not supported.");
+    }
+
+    @Override
+    public void createUserServiceDatabase() {
+        throw new UnsupportedOperationException("Не поддерживается регистрация / register not supported.");
+    }
+
+    @Override
+    public DataBase getDataBase() {
+        throw new UnsupportedOperationException("Не поддерживается регистрация / register not supported.");
+    }
+
+    @Override
+    public int getUserId() {
+        throw new UnsupportedOperationException("Не поддерживается регистрация / register not supported.");
     }
 
     @Override

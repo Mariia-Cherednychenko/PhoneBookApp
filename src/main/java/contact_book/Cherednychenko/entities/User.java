@@ -1,5 +1,6 @@
 package contact_book.Cherednychenko.entities;
 
+import database.ContactDataBase;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -10,4 +11,5 @@ public class User {
     private String name;
     private String password;
     private String date_born;
+    private ContactDataBase contactDataBase= new ContactDataBase();
 }

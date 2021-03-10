@@ -3,6 +3,7 @@ package contact_book.Cherednychenko.services.implementations;
 import contact_book.Cherednychenko.annotations.CreateIfMode;
 import contact_book.Cherednychenko.entities.Contact;
 import contact_book.Cherednychenko.services.ContactsService;
+import database.DataBase;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -13,7 +14,7 @@ import java.util.stream.Collectors;
 public class InMemoryContactsService implements ContactsService {
 
     List<Contact> contacts = new ArrayList<>();
-//  List<Contact> contactsList = new LinkedList<>();
+
 
     private int newId() {
         if(contacts.isEmpty()) return 1;
@@ -35,17 +36,6 @@ public class InMemoryContactsService implements ContactsService {
         contacts.add(contact);
     }
 
-    /*@Override
-    public boolean add(Contact contact) {
-
-        if (!checkPhoneValidation(contact.getContact(Contact.contactType.PHONE))) {
-            return false;
-        } else {
-            contactsList.add(contact);
-            return true;
-        }
-    }*/
-
     @Override
     public void remove(Integer id) {
         contacts = contacts.stream()
@@ -53,10 +43,6 @@ public class InMemoryContactsService implements ContactsService {
                 .collect(Collectors.toList());
     }
 
-    /*@Override
-    public void remove(int index) {
-        contactsList.remove(index);
-    }*/
 
     @Override
     public List<Contact> findByName(String beginningName) {
@@ -70,6 +56,16 @@ public class InMemoryContactsService implements ContactsService {
         return contacts.stream()
                 .filter(c->c.getValue().contains(valueContact))
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void createContactServiceDatabase() {
+        throw new UnsupportedOperationException("Не поддерживается регистрация / register not supported.");
+    }
+
+    @Override
+    public DataBase getDataBase() {
+        throw new UnsupportedOperationException("Не поддерживается регистрация / register not supported.");
     }
 
 }

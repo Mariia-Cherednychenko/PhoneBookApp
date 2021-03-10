@@ -3,6 +3,3 @@
 3[PHONE:maria|+380989998888]
 4[EMAIL:sania|sun@qwe.iu]
 5[PHONE:yana|+380505554444]
-6[EMAIL:tania|work@qwe.iu]
-7[PHONE:lina|+380447771111]
-8[EMAIL:vanya|help@qwe.iu]

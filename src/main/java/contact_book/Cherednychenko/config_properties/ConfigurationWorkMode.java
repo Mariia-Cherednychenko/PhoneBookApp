@@ -16,7 +16,8 @@ public class ConfigurationWorkMode {
 public enum WorkModeType{
     API,
     FILE,
-    MEMORY
+    MEMORY,
+    DATABASE
 }
 
 }

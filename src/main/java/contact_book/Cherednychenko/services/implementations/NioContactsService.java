@@ -8,6 +8,7 @@ import contact_book.Cherednychenko.exception.FailedRemoveContactException;
 import contact_book.Cherednychenko.exception.ParseContactException;
 import contact_book.Cherednychenko.services.ContactsService;
 import contact_book.Cherednychenko.utility.ContactsSerializer;
+import database.DataBase;
 import lombok.RequiredArgsConstructor;
 
 import java.io.File;
@@ -220,6 +221,16 @@ public class NioContactsService implements ContactsService {
             }
         });
         return contactList;
+    }
+
+    @Override
+    public void createContactServiceDatabase() {
+        throw new UnsupportedOperationException("Не поддерживается регистрация / register not supported.");
+    }
+
+    @Override
+    public DataBase getDataBase() {
+        throw new UnsupportedOperationException("Не поддерживается регистрация / register not supported.");
     }
 }
 

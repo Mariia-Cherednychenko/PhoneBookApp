@@ -23,8 +23,6 @@ public class ServiceCreationPerMode {
     private ServiceFactory userServiceFactory = new UserServiceFactory();
     private ServiceFactory contactServiceFactory = new ContactServiceFactory();
 
-    //private ContactServiceFactory buildServiceFactory = new BuildServiceFactory();
-
 
     public ServiceCreationPerMode(ObjectMapper objectMapper, ContactsSerializer contactsSerializer,
                                   HttpClient httpClient, String baseUri, String baseFile) {
@@ -43,19 +41,27 @@ public class ServiceCreationPerMode {
         return contactsService;
     }
 
-    public ServiceCreationPerMode invoke() throws FailedToCreateServiceException {
+    public ServiceCreationPerMode createContactAndUserServicesPerMode(ConfigurationWorkMode.WorkModeType workModeType)
+            throws FailedToCreateServiceException
+
+    {
         if (contactsService == null && userService == null) {
-            if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.API.toString())) {
+            if (workModeType.equals(ConfigurationWorkMode.WorkModeType.API)) {
                 {
-                    userService = userServiceFactory.createUserService(baseUri, objectMapper, httpClient);
+                    userService = userServiceFactory.createApiUserService(baseUri, objectMapper, httpClient);
+                    userService.createUserServiceDatabase();
                     contactsService = contactServiceFactory.createApiContactService(httpClient, objectMapper, baseUri);
+                    contactsService.createContactServiceDatabase();
                 }
-            } else if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.FILE.toString())) {
+            }
+            else if (workModeType.equals(ConfigurationWorkMode.WorkModeType.FILE)) {
                 if (contactsService == null && userService == null)
                     contactsService = contactServiceFactory.createFileContactService(contactsSerializer, baseFile);
-            } else if (System.getProperty("app.service.workmode").equals(ConfigurationWorkMode.WorkModeType.FILE.toString())) {
+            }
+            else if (workModeType.equals(ConfigurationWorkMode.WorkModeType.MEMORY)) {
                 contactsService = contactServiceFactory.createInMemoryContactService();
-            } else {
+            }
+            else {
                 new FailedLoadigConfigurationException().getMessage(("Ошибка при загрузке конфигурации из файла " +
                         "/ Error loading configuration"));
             }

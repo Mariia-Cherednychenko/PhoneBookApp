@@ -9,6 +9,7 @@ public class Contact {
     private String name;
     private String value;
     private contactType type;
+    private int userId;
 
     public enum contactType {EMAIL, PHONE}
 
