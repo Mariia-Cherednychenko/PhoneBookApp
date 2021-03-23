@@ -20,7 +20,7 @@ public class UserDataBase extends DataBase {
             connection.preparedStatement=connection.connection.prepareStatement(
                     "INSERT INTO users  " +
                             "(user_name, user_password, user_login, user_date_born ) " +
-                            "VALUES(?) (?) (?) (?)");
+                            "VALUES(?, ?, ?, ?)");
             connection.preparedStatement.setString(1,
                     user.getName());
             connection.preparedStatement.setString(2,
@@ -30,7 +30,7 @@ public class UserDataBase extends DataBase {
             connection.preparedStatement.setString(4,
                     user.getDate_born());
             connection.preparedStatement.execute();
-            connection.connection.close();
+           // connection.connection.close();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();

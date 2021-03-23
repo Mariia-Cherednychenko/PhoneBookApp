@@ -23,7 +23,7 @@ public class ContactDataBase extends DataBase {
             connection.preparedStatement=connection.connection.prepareStatement(
                     "INSERT INTO contacts  " +
                             "(contact_id, contact_name, contact_value, contact_type, user_id ) " +
-                            "VALUES(?) (?) (?) (?) (?)");
+                            "VALUES(?, ?, ?, ?, ?)");
             connection.preparedStatement.setString(1, contact.getId().toString());
             connection.preparedStatement.setString(2, contact.getName());
             connection.preparedStatement.setString(3,
